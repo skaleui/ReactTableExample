@@ -1,24 +1,103 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState, useMemo } from 'react';
+import TableContainer from './TableContainer';
+
+import { Container } from 'reactstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { SelectColumnFilter } from './filters';
+import { RenderRowSubComponent } from './subcomponent';
 
 function App() {
+
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    const doFetch = async() => {
+      const response = await fetch('https://randomuser.me/api/?results=100');
+      const body = await response.json();
+      const contacts = body.results;
+      console.log(contacts);
+      setData(contacts);
+    };
+    doFetch();
+
+  }, [])
+
+  const columns = useMemo(
+    ()=> [
+      {
+        Header: () => null,
+        id: 'expander',
+        Cell: ({ row }) => (
+          <span {...row.getToggleRowExpandedProps()}>
+            {row.isExpanded ? '👇' : '👉'}
+          </span>
+        )
+      },
+      {
+        Header: 'Title',
+        accessor: 'name.title',
+        disableSortedBy: true,
+        Filter: SelectColumnFilter,
+        filter: 'equals',
+      },
+      {
+        Header: 'First Name',
+        accessor: 'name.first',
+      },
+      {
+        Header: 'Last Name',
+        accessor: 'name.last',
+      },
+      {
+        Header: 'Email',
+        accessor: 'email',
+      },
+      {
+        Header: 'City',
+        accessor: 'location.city',
+      },
+      {
+        Header: 'Hemisphere',
+        accessor: (values)=> {
+          const {latitude, longitude} = values.location.coordinates;
+          const first = Number(latitude) > 0 ? 'N' : 'S';
+          const second = Number(longitude) > 0 ? 'E' : 'W';
+          return first + '/' + second;
+        },
+        disableSortedBy: true,
+        Filter: SelectColumnFilter,
+        filter: 'equals',
+        Cell: ({cell}) => {
+          const {value} = cell;
+
+          const pickEmoji = (value) => {
+            let first = value[0]; // N or S
+            let second = value[1]; // E or W
+            const options = ['⇖', '⇗', '⇙', '⇘'];
+            let num = first === 'N' ? 0 : 2;
+            num = second === 'E' ? num + 1 : num;
+            return options[num];
+          };
+
+          return (
+            <div style={{ textAlign: 'center', fontSize: 18 }}>
+              {pickEmoji(value)}
+            </div>
+          );
+        },
+      },    
+    ], []
+  );
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container style={{marginTop: 100}}>
+      <TableContainer 
+        columns={columns} 
+        data={data} 
+        renderRowSubComponent={RenderRowSubComponent}
+      />
+    </Container>
   );
 }
 
