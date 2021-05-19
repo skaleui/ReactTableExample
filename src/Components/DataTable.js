@@ -1,9 +1,9 @@
 import React, {Fragment} from 'react';
 import { useTable, useSortBy, useFilters, useExpanded, usePagination} from 'react-table';
 import { Table, Row, Col, Button, Input, CustomInput } from 'reactstrap';
-import { Filter, DefaultColumnFilter } from './filters';
+import { Filter, DefaultColumnFilter } from '../Utils/filters';
 
-const TableContainer = ({ columns, data, renderRowSubComponent }) => {
+export const DataTable = ({ columns, data, renderRowSubComponent }) => {
     const {
         getTableProps,
         getTableBodyProps,
@@ -157,53 +157,6 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
 
 
         </Fragment>
-
-
-
-
-/********************/
-        // <Table bordered hover {...getTableProps()}>
-        //     <thead>
-        //     {headerGroups.map((headerGroup) => (
-        //         <tr {...headerGroup.getHeaderGroupProps()}>
-        //             {headerGroup.headers.map((column) => (
-        //                 <th {...column.getHeaderProps()}>
-        //                     <div {...column.getSortByToggleProps()}>
-        //                         {column.render('Header')}
-        //                         {generateSortingIndicator(column)}
-        //                     </div>
-        //                     <Filter column={column} />
-        //                 </th>
-        //             ))}
-        //         </tr>
-        //     ))}
-        //     </thead>
-
-        //     <tbody {...getTableBodyProps()}>
-        //         {page.map((row) => {
-        //             prepareRow(row);
-        //             return (
-        //                 <Fragment key={row.getRowProps().key}>
-        //                     <tr>
-        //                         {row.cells.map((cell) => {
-        //                             return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-        //                         })}
-        //                     </tr>
-        //                     {row.isExpanded && (
-        //                         <tr>
-        //                             <td colSpan={visibleColumns.length}>
-        //                                 {renderRowSubComponent(row)}
-        //                             </td>
-        //                         </tr>
-        //                     )}
-        //                 </Fragment>
-        //             )
-        //         })
-
-        //         }
-        //     </tbody>
-        // </Table>
     )
 }
 
-export default TableContainer;
