@@ -16,7 +16,7 @@ import {
 export const NavbarContainer = (props) => {
 
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggle = () => setIsOpen( !isOpen );
 
